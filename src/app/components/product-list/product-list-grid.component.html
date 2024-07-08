@@ -1,0 +1,83 @@
+<div class="main-content">
+    <div class="section-content section-content-p30">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- loop over the collection of products -->
+                <div *ngFor="let item of products" class="col-md-3">
+                    <div class="product-box">
+
+                        <a routerLink="/products/{{ item.id }}">
+                            <img src="{{item.imageUrl}}" class="img-responsive">
+                        </a> <br>
+
+                        <a routerLink="/products/{{ item.id }}">
+                            <h1>{{ item.name }}</h1>
+                        </a>
+
+                        <div class="price">{{ item.unitPrice | currency:'USD'}}</div>
+                        <button (click)="addToCart(item)" class="btn btn-primary btn-sm">Add to cart</button>
+                    </div>
+                </div>
+
+                <!-- if products empty then display a message -->
+                <!-- Dấu (?) <=> products === null/undefined tránh exception-->
+                <div *ngIf="products?.length === 0" class="alert alert-warning col-md-12" role="alert">
+                    Not products found.
+                </div>
+
+            </div>
+
+            <!-- pagination -->
+            <div class="footer-pagination">
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+
+                        <div class="row">
+                            <div class="col-md-7">
+                                <!-- 
+                                + (pageChange) -> dùng để liên kết hai chiều (two-way binding) giữa thuộc tính page của ngb-pagination 
+                                    và biến pageNumber trong component.
+                                + [pageSize] ->  xác định số lượng mục (items) được hiển thị trên mỗi trang.
+                                + (pageChange) -> một sự kiện (event) được phát ra mỗi khi người dùng thay đổi trang.
+                                + [boundaryLinks] -> quyết định việc có hiển thị các nút điều hướng tới trang đầu tiên (first) và trang cuối cùng (last) hay không.
+                                + [directionLinks]="true" -> xác định việc có hiển thị các nút điều hướng tới trang trước (previous) và trang tiếp theo (next) hay không.
+                                + [rotate]="true" -> sẽ không cố gắng hiển thị tất cả các trang liên tiếp khi có nhiều trang. 
+                                    Thay vào đó, nó sẽ hiển thị một dải các trang xung quanh trang hiện tại
+                                -->
+                                <ngb-pagination class="d-flex justify-content-center"
+                                    [(page)]="pageNumber" 
+                                    [pageSize]="pageSize"
+                                    [collectionSize]="totalElements" 
+                                    [maxSize]="5" 
+                                    [directionLinks]="true"
+                                    [boundaryLinks]="true" 
+                                    [rotate]="true"
+                                    (pageChange)="listProducts()">
+                                </ngb-pagination>
+                            </div>
+
+                            <div class="col-md-5" style="text-align: right;">
+                                <div class="row">
+                                    <label class="col-sm-6 col-form-label">Page size:</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-select form-select" #pageSelect (change)="updatePageSize(pageSelect.value)">
+                                            <option value="5" selected>5</option>
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
